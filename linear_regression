@@ -1,0 +1,38 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+from sklearn.datasets import make_regression
+from sklearn.model_selection import train_test_split
+data=pd.read_csv('youngmodulus.csv')
+rows=data.shape[0]
+cols=data.shape[1]
+x=np.zeros(rows)
+y=np.zeros(rows)
+d=data.values
+for j in range(0,rows):
+    x[j]=d[j,0]
+    y[j]=d[j,1]
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
+regr=LinearRegression()
+X_train = X_train.reshape(-1, 1)
+y_train = y_train.reshape(-1, 1)
+r=X_train.shape[0]
+c=X_train.shape[1]
+regr.fit(X_train, y_train)
+y_pred = regr.predict(X_train)
+w0=regr.intercept_
+w1=regr.coef_
+print(w1)
+# Plotting
+plt.figure(figsize=(10, 6))
+plt.scatter(X_train, y_train, color='black')
+plt.plot(X_train, y_pred, color='blue', linewidth=1)
+plt.xlabel('Strain')
+plt.ylabel('Stress (MPa)')
+plt.title('Linear Regression on Stress-Strain Data')
+plt.grid(True)
+plt.show()
